@@ -71,8 +71,7 @@ class Ratings(object):
         Computes the Dirichlet mean with a prior.
         """
         counter   = Counter(arr)
-        votes     = [val[1] for val in
-                     sorted(counter.items(), key=itemgetter(0))]
+        votes     = [counter.get(n, 0) for n in range(1, 6)]
         posterior = map(sum, zip(votes, prior))
         N         = sum(posterior)
         weights   = map(lambda i: (i[0]+1)*i[1], enumerate(posterior))
