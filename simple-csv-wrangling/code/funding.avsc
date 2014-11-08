@@ -1,0 +1,16 @@
+{"namespace": "funding.districtdatalabs",
+ "type": "record",
+ "name": "FundingRecord",
+ "fields": [
+     {"name": "permalink", "type": "string"},
+     {"name": "company", "type": "string"},
+     {"name": "numEmps", "type": ["int", "null"]},
+     {"name": "category", "type": "string"},
+     {"name": "city", "type": "string"},
+     {"name": "state", "type": "string"},
+     {"name": "fundedDate", "type": "string"},
+     {"name": "raisedAmt", "type": "int"},
+     {"name": "raisedCurrency", "type": "string"},
+     {"name": "round", "type": "string"}
+ ]
+}
