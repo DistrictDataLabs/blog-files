@@ -1,0 +1,22 @@
+name: ddltwitter-env
+dependencies:
+- python=3
+- matplotlib
+- pandas
+- numpy
+- scipy
+- statsmodels
+- gdal
+- geos
+- notebook
+- ipython
+- pip
+- pip:
+    - seaborn
+    - shapely
+    - fiona
+    - geopandas
+    - rtree
+    - pyarrow
+    - bokeh
+- datashader
