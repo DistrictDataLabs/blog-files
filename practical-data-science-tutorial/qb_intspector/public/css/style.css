@@ -1,0 +1,89 @@
+body {
+  background-color: #E5E5FF;
+}
+img.resize {
+  max-width:70%;
+  max-height:70%;
+}
+#the-string {
+  display: none;
+}
+body, html {
+    height: 100%;
+}
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
+body, html {
+height: 100%;
+color: #777;
+line-height: 1.8;
+}
+/* Create a Parallax Effect */
+.bgimg-1, .bgimg-2, .bgimg-3 {
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+.row {
+	min-height: 300px;
+	position: relative;
+  text-align: center;
+}
+
+.column_center {
+  display: inline-block;
+  padding: 20px;
+}
+/* First image (Logo. Full height) */
+.bgimg-1 {
+background-image: url("../images/pic1.jpg");
+min-height: 100%;
+}
+/* Second image (Portfolio) */
+.bgimg-2 {
+background-image: url("../images/pic2.jpg");
+min-height: 400px;
+}
+/* Third image (Contact) */
+.bgimg-3 {
+background-image: url("../images/pic3.jpg");
+min-height: 400px;
+}
+.w3-wide {letter-spacing: 10px;}
+.w3-hover-opacity {cursor: pointer;}
+/* Turn off parallax scrolling for tablets and phones */
+@media only screen and (max-device-width: 1024px) {
+.bgimg-1, .bgimg-2, .bgimg-3 {
+background-attachment: scroll;
+}
+.container {
+  overflow: hidden;
+}
+.parallax {
+    /* The image used */
+    background-image: url("../images/pic1.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.sliding-background {
+  background: url("../images/pic2.jpg") repeat-x;
+  height: 560px;
+  width: 5076px;
+  animation: slide 60s linear infinite;
+}
+
+@keyframes slide{
+  0%{
+    transform: translate3d(0, 0, 0);
+  }
+  100%{
+    transform: translate3d(-1692px, 0, 0);
+  }
+}

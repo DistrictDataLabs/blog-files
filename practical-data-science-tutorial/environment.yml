@@ -1,0 +1,29 @@
+name: classificationEnv
+channels:
+  - conda-forge
+dependencies:
+- python=3
+- matplotlib
+- ipykernel
+- pandas
+- numpy
+- cython
+- gcc
+- scipy
+- notebook>=5
+- ipython
+- requests
+- dask
+- pip:
+    - pyarrow
+    - scikit-learn
+    - yellowbrick
+    - newspaper3k
+    - readability-lxml
+    - yapf
+    - sqlite3
+    - cherrypy
+    - feedparser
+    - beautifulsoup4
+
+    

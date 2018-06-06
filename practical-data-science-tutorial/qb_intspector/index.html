@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+   <title>QB-Spective</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <style>
+      body { font-family: sans-serif; }
+      h1 {
+      font-family: serif;
+      margin-bottom: 0;
+      }
+      article {
+      width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      }
+      .image-wrapper {
+      width: 200px;
+      float: left;
+      padding-right: 25px;
+      padding-bottom: 10px;
+      }
+      .image-wrapper img {
+      width: 100%;
+      }
+      .image-wrapper span {
+      font-family: sans-serif;
+      font-size: 10px;
+      color: #ccc;
+      }
+      .article-meta {
+      font-family: sans-serif;
+      color: #aaa;
+      font-size: 12px;
+      }
+      p {
+      font-size: 14px;
+      }
+      center-block {
+      display: block;
+      margin-right: auto;
+      margin-left: auto;
+      }
+      input[type=text], select {
+      width: 60%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      vertical-align: middle;
+      border-radius: 4px;
+      align-items: center;
+      box-sizing: border-box;
+      }
+   </style>
+   <head>
+      <link href="/static/css/style.css" rel="stylesheet">
+      <script src="http://code.jquery.com/jquery-3.3.1.js"></script>
+      <script type="text/javascript">
+         $(document).ready(function() {
+           $("#generate-string").click(function(e) {
+             $.post("/generator", {"url": $("input[name='url']").val()},'json')
+              .done(function(string) {
+               $("#the-string").fadeIn(); 
+                 var test=JSON.parse(string)
+                 var byline = "Written by: "
+                 var imgsrc = "Image source: "
+                 if (test["answer"]=="This article IS about a quarterback") {
+                     $("#the-string input").val(test["answer"]);
+                     $("#my_image").attr("src",test["top_image"]);
+                     $("#my_image").fadeIn();
+                     $("#the-story").fadeIn();
+                     $("#the-story").text(test["text"]);
+                     $("#author").fadeIn();
+                     $("#author").text(byline.concat(test["author"]));
+                     $("#myheader").fadeIn();
+                     $("#myheader").text(test["title"]);
+                     $("#source").fadeIn();
+                   $("#source").text(imgsrc.concat(test["base"]));
+                 } else if (test["answer"]=="Unable to reach website") {
+                     $("#the-string input").val(test["answer"]);
+                     $("#the-string").fadeIn();
+                 } else {
+                     $("#the-string input").val(test["answer"]);
+                     $("#the-string").fadeIn();
+                     $("#the-story").fadeOut();
+                     $("#my_image").fadeOut();
+                     $("#myheader").fadeOut();
+                     $("#author").fadeOut();
+                     $("#source").fadeOut();
+                 } 
+             });
+             e.preventDefault();
+           });
+           $("#replace-string").click(function(e) {
+             $.ajax({
+               type: "PUT",
+               url: "/generator",
+               data: {"another_string": $("#the-string input").val()}
+             })
+             .done(function() {
+               alert("New prediction!");
+             });
+             e.preventDefault();
+           });
+         
+           $("#delete-string").click(function(e) {
+             $.ajax({
+               type: "DELETE",
+               url: "/generator"
+             })
+             .done(function() {
+               $("#the-string").fadeOut();
+               $("#the-story").fadeOut();
+               $("#my_image").fadeOut();
+               $("#myheader").fadeOut();
+               $("#author").fadeOut();
+               $("#source").fadeOut();
+             });
+             e.preventDefault();
+           });         
+         });
+      </script>
+   </head>
+   <body>
+      <!-- First Parallax Image with Logo Text -->
+      <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
+         <div class="w3-display-middle" style="white-space:nowrap;">
+            <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">QB <span class="w3-hide-small"> INT</span> <span>-</span>Spector</span>
+         </div>
+      </div>
+      <!-- Container (About Section) -->
+      <div class="w3-content w3-container w3-padding-64" id="about">
+         <h3 class="w3-center">ABOUT QB INT-Spector</h3>
+         <p>The <em>QB INT-Spector</em> is a fictitious web application that produces data products; it takes a web link to a news article, extracts text, and uses machine learning to predict whether the article is about quarterbacks (American football).  To use the application:</p>
+         <ul>
+            <li> Paste a valid web url in the input box below
+            <li> Click the submit button to get a prediction
+            <li> If the article is about quarterbacks, you will get a prediction and the article content will load
+            <li> If not, you will receive an appropriate message/prediction and previous content will disappear if it was present
+         </ul>
+         <!-- Second Parallax Image with Portfolio Text -->
+         <div class="bgimg-2 w3-display-container w3-opacity-min">
+            <div class="w3-display-middle">
+               <span class="w3-xxlarge w3-text-white w3-wide">GET PREDICTIONS</span>
+            </div>
+         </div>
+      </div>
+       
+       <h3><center>Paste a valid web url in the box below and press <b>Get Prediction</b>.</center></h3><br>
+<!--             <div class="row">
+		  
+		      <input type="text" size="50" class="column_center" name="url"/>
+               <button id="generate-string" >Get Prediction!</button>
+		      <input type="text" size="50" class="column_center" name="url"/>
+                <button id="delete-string" >Delete Prediction</button>
+
+		</div>  -->
+       <div class="row">
+      <input type="text" size="50" class="column_center" name="url"/>
+      <button id="generate-string" class="center-block" >Get Prediction!</button>
+      <div id="the-string">
+         <input type="text" size="35" class="column_center" />
+         <button id="delete-string" >Delete Prediction</button>
+           </div></div>
+      <article>
+         <h1 id="myheader"> </h1>
+         <img class="resize" id="my_image">
+         <br>
+         <span id="source"></span>
+         <p id="author"></p>
+          <div>
+         <p id="the-story"></p>
+          </div>
+      </article>
+      <!-- Third Parallax Image with Portfolio Text -->
+      <div class="bgimg-3 w3-display-container w3-opacity-min">
+         <div class="w3-display-middle">
+            <span class="w3-xxlarge w3-text-white w3-wide">Thanks for predicting!!</span>
+         </div>
+      </div>
+      <!-- Container (Contact Section) -->
+      <div class="w3-content w3-container w3-padding-64" id="contact">
+         <h3 class="w3-center">Data Product created by:</h3>
+         <p class="w3-center"><em>Linwood Creekmore</em></p>
+         <div class="w3-row w3-padding-32 w3-section">
+            <div class="w3-col m4 w3-container">
+               <!-- Add Google Maps -->
+               <div id="googleMap" class="w3-round-large w3-greyscale" style="width:100%;height:400px;"></div>
+            </div>
+            <div class="w3-col m8 w3-panel">
+               <div class="w3-large w3-margin-bottom">
+                  <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Washington, D.C. United States<br>
+                  
+               </div>
+             
+            </div>
+         </div>
+      </div>
+   </body>
+</html>
