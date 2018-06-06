@@ -1,14 +1,30 @@
+#!/usr/bin/python
+
+# Author: Linwood Creekmore
+# email: valinvescap@gmail.com
+# date: 5 June 2018
+
+#############################
+# Standard library imports
+#############################
+
 import datetime
+
+#############################
+# Third party imports
+#############################
+
 import numpy as np
 from sklearn.pipeline import Pipeline
-from sklearn.base import TransformerMixin,BaseEstimator
+from sklearn.base import TransformerMixin, BaseEstimator
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import StratifiedShuffleSplit,cross_validate,cross_val_score
+from sklearn.model_selection import StratifiedShuffleSplit, cross_validate, cross_val_score
 
-# custom transformer
-class DenseTransformer(BaseEstimator,TransformerMixin):
 
+# custom sklearn transformer
+class DenseTransformer(BaseEstimator, TransformerMixin):
     def transform(self, X, y=None, **fit_params):
+        """Function to convert sparse to dense"""
         return X.todense()
 
     def fit_transform(self, X, y=None, **fit_params):
@@ -17,6 +33,7 @@ class DenseTransformer(BaseEstimator,TransformerMixin):
 
     def fit(self, X, y=None, **fit_params):
         return self
+
 
 def modeler(estimator):
     """
@@ -40,14 +57,15 @@ def modeler(estimator):
         end.
     """
     # make a pipeline for any estimator
-    sklearn_pipe = Pipeline([
-        ('vectorizer', TfidfVectorizer(stop_words='english',ngram_range=(1,1))),
-        ('to_dense', DenseTransformer()),
-        ('est',estimator)
-                       ])
+    sklearn_pipe = Pipeline([('vectorizer',
+                              TfidfVectorizer(
+                                  stop_words='english', ngram_range=(1, 1))),
+                             ('to_dense', DenseTransformer()), ('est',
+                                                                estimator)])
     return sklearn_pipe
 
-def model_selection(estimator,X, y,num=5,size=.05,state=42):
+
+def model_selection(estimator, X, y, num=5, size=.05, state=42):
     """
     Function to test scikit-learn evaluators on text
     dataset for classification.  
@@ -82,32 +100,34 @@ def model_selection(estimator,X, y,num=5,size=.05,state=42):
     """
     # set random state
     estimator.random_state = state
-    
+
     # create pipeline
     model = modeler(estimator)
-    
+
     # cross validation set up
-    cv = StratifiedShuffleSplit(n_splits=num, test_size=size, random_state=state)
-    
+    cv = StratifiedShuffleSplit(
+        n_splits=num, test_size=size, random_state=state)
+
     # get the estimator name
     es_name = estimator.__class__.__name__
-    
+
     # test if this is bayesian method which can't be multiprocessed
-    if es_name in ['MultinomialNB','BernoulliNB','GaussianNB']:
+    if es_name in ['MultinomialNB', 'BernoulliNB', 'GaussianNB']:
         core_use = 1
     else:
         core_use = -1
-    
+
     # set start time
     start = np.datetime64(datetime.datetime.now())
-    
+
     # get scores
-    scores = cross_val_score(model, X, y, cv=cv,n_jobs=core_use)
-    
+    scores = cross_val_score(model, X, y, cv=cv, n_jobs=core_use)
+
     # get the duration
-    dur = np.timedelta64(np.datetime64(datetime.datetime.now())-start, 'ms')/num
-    
+    dur = np.timedelta64(np.datetime64(datetime.datetime.now()) - start,
+                         'ms') / num
+
     # get standard deviation
     var = np.std(scores)
-    
-    return es_name,np.float64(np.mean(scores)),var,dur
+
+    return es_name, np.float64(np.mean(scores)), var, dur
